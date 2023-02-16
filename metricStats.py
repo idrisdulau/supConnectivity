@@ -55,10 +55,14 @@ for DB in tqdm.tqdm(["CHASEDB1","DRHAGIS","DRIVE_RETA","HRF","IOSTAR","LESAV"]):
             stackPREDMetricsList.append((imageMetricsList[0][0], imageMetricsList[0][1], imageMetricsList[0][2], imageMetricsList[0][3]))
             stackCC1MetricsList.append((imageMetricsList[-1][0], imageMetricsList[-1][1], imageMetricsList[-1][2], imageMetricsList[-1][3]))
 
-            for (TP,DICE,CC,THLD) in imageMetricsList:
-                curTP, bestDICE, curCC, curTHLD = max(imageMetricsList, key=lambda x: x[1])
+            # for (TP,DICE,CC,THLD) in imageMetricsList:
+            #     curTP, bestDICE, curCC, curTHLD = max(imageMetricsList, key=lambda x: x[1])
+            # stackDICEMetricsList.append((curTP, bestDICE, curCC, curTHLD))
 
-            stackDICEMetricsList.append((curTP, bestDICE, curCC, curTHLD))
+            tmpTuple = filter(lambda x: x[3] >= 0.0103, imageMetricsList)
+            curTP, curDICE, curCC, maxTHLD = min(tmpTuple, key=lambda x: x[3])
+            stackDICEMetricsList.append((curTP, curDICE, curCC, maxTHLD))
+
 
         TPMeanPRED = round(statistics.mean([TP for TP,DICE,CC,THLD in stackPREDMetricsList]))
         DICEMeanPRED = round(statistics.mean([DICE for TP,DICE,CC,THLD in stackPREDMetricsList]),3)
